@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        button {
+            background: #008EB0; /* Синий цвет фона */
+            color: #fff; /* Белый цвет текста */
+            border: none; /* Убираем рамку */
+        }
+        .green { background: #73A353; }
+        .red { background: #C1172C; }
+        .orange { background: #F7941E; }
+    </style>
+    <meta charset="UTF-8">
+    <title>Table users </title>
+
+</head>
+<body>
+<div th:switch="${users}">
+    <h2 th:case="null">No users found!</h2>
+    <div th:case="*">
+        <h2 style="border: cornflowerblue">Admin</h2>
+        <table border="1">
+            <colgroup>
+                <col style="background:Khaki"><!-- С помощью этой конструкции задаем цвет фона для первых двух столбцов таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+                <col style="background-color:Khaki"><!-- Задаем цвет фона для следующего (одного) столбца таблицы-->
+            </colgroup>
+
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>E-Mail</th>
+                <th>Password</th>
+                <th>Roles</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.password}"></td>
+                <td th:text="${user.roles}"></td>
+                <td><button class="orange"><a th:href="@{update/{id}(id=${user.id})}">Edit</a></button></td>
+                <td><button class="red"> <a th:href="@{delete (id=${user.id})}">Delete</a></button></td>
+            </tr>
+
+        </table>
+    </div>
+    <br>
+    <br>
+    <button class="green"><a href="/create">New user</a></button>
+    <button class="green"><a th:href="@{/logout}">Logout</a></button>
+</div>
+</body>
+</html>
