@@ -26,6 +26,13 @@ public class UserController {
         this.roleService = roleService;
     }
 
+
+    @GetMapping("/login")
+    public String getLogin(){
+        return "login";
+            }
+
+
     @GetMapping(value = "admin-list")
     public ModelAndView getAllAdmin() {
         ModelAndView modelAndView = new ModelAndView();
