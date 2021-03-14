@@ -42,14 +42,6 @@ public class User implements UserDetails {
     public User() {
 
     }
-    public void setRoles(String roles) {
-        if (roles.contains("ADMIN")) {
-            this.roles.add(new Role("ROLE_ADMIN"));
-        }
-        if (roles.contains("USER")) {
-            this.roles.add(new Role("ROLE_USER"));
-        }
-    }
 
     public User(String firstName, String lastName, Integer age, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
@@ -112,7 +104,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return firstName;
+        return email;
     }
 
     @Override

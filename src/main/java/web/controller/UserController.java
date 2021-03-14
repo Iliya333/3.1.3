@@ -33,20 +33,20 @@ public class UserController {
             }
 
 
-    @GetMapping(value = "admin-list")
+    @GetMapping(value = "admin")
     public ModelAndView getAllAdmin() {
         ModelAndView modelAndView = new ModelAndView();
         List<User> users = userService.listUser();
-        modelAndView.setViewName("admin-list");
+        modelAndView.setViewName("admin");
         modelAndView.addObject("users", users);
         return modelAndView;
     }
 
-    @GetMapping(value = "user-list")
+    @GetMapping(value = "user")
     public ModelAndView getAllUser(Principal currentUser) {
-        User user = userService.findByFirstName(currentUser.getName());
+        User user = userService.findByEmail(currentUser.getName());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user-list");
+        modelAndView.setViewName("user");
         modelAndView.addObject("users", user);
         return modelAndView;
     }
@@ -64,14 +64,14 @@ public class UserController {
     @PostMapping("/create")
     public String createUser(User user) {
         userService.saveUser(user);
-        return "redirect:admin-list";
+        return "redirect:admin";
 
     }
 
     @GetMapping("delete")
     public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteById(id);
-        return "redirect:admin-list";
+        return "redirect:admin";
     }
 
     @GetMapping("update/{id}")
@@ -85,8 +85,7 @@ public class UserController {
     @PostMapping("update")
     public String updateUser(User user) {
         userService.updateUser(user);
-        return "redirect:admin-list";
-
+        return "redirect:admin";
 
     }
 }

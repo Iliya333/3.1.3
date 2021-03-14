@@ -24,10 +24,10 @@ public class UserDaoImp implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public User findByFirstName(String firstName) {
+    public User findByEmail(String email) {
         TypedQuery<User> query = entityManager.createQuery(
-                "SELECT u FROM User u WHERE u.firstName = :firstName", User.class);
-        return query.setParameter("firstName", firstName).getSingleResult();
+                "SELECT u FROM User u WHERE u.email = :email", User.class);
+        return query.setParameter("email", email).getSingleResult();
     }
 
     @Override
