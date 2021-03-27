@@ -30,9 +30,9 @@ public class UserController {
 
 
     @GetMapping("/login")
-    public String getLogin(){
+    public String getLogin() {
         return "login";
-            }
+    }
 
 
     @GetMapping(value = "/admin")
@@ -47,7 +47,7 @@ public class UserController {
 
     @GetMapping(value = "user")
     public String getAllUser(ModelMap model) {
-        UserDetails userDetails=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("user", userDetails);
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("users", userService.findAll());
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String createUsers(@ModelAttribute  User user) {
+    public String createUsers(@ModelAttribute User user) {
         userService.saveUser(user);
         return "redirect:/admin";
     }
