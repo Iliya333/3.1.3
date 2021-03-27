@@ -1,7 +1,10 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.Role;
@@ -11,7 +14,6 @@ import web.service.UserService;
 
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -33,32 +35,29 @@ public class UserController {
             }
 
 
-    @GetMapping(value = "admin")
-    public ModelAndView getAllAdmin() {
-        ModelAndView modelAndView = new ModelAndView();
-        List<User> users = userService.listUser();
-        modelAndView.setViewName("admin");
-        modelAndView.addObject("users", users);
-        return modelAndView;
+    @GetMapping(value = "/admin")
+    public String getAllAdmin(ModelMap model) {
+        UserDetails userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("authorizedUser", userDetails);
+        model.addAttribute("newUser", new User());
+        model.addAttribute("roles", roleService.findAllRoles());
+        model.addAttribute("users", userService.findAll());
+        return "admin";
     }
 
     @GetMapping(value = "user")
-    public ModelAndView getAllUser(Principal currentUser) {
-        User user = userService.findByEmail(currentUser.getName());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user");
-        modelAndView.addObject("users", user);
-        return modelAndView;
+    public String getAllUser(ModelMap model) {
+        UserDetails userDetails=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("user", userDetails);
+        model.addAttribute("roles", roleService.findAllRoles());
+        model.addAttribute("users", userService.findAll());
+        return "user";
     }
 
-    @GetMapping("create")
-    public ModelAndView createUsers(User user) {
-        ModelAndView modelAndView = new ModelAndView();
-        Set<Role> uniqueRoles = roleService.findAllRoles();
-        modelAndView.addObject("users", user);
-        modelAndView.addObject("roles", uniqueRoles);
-        modelAndView.setViewName("create");
-        return modelAndView;
+    @GetMapping("/create")
+    public String createUsers(@ModelAttribute  User user) {
+        userService.saveUser(user);
+        return "redirect:/admin";
     }
 
     @PostMapping("/create")
@@ -68,24 +67,17 @@ public class UserController {
 
     }
 
-    @GetMapping("delete")
+    @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteById(id);
-        return "redirect:admin";
+        return "redirect:/admin";
     }
 
-    @GetMapping("update/{id}")
-    public ModelAndView updateUsers(@PathVariable("id") Long id) {
-        ModelAndView modelAndView = new ModelAndView("update");
-        modelAndView.addObject("users", userService.getUserId(id));
-        modelAndView.addObject("roles", roleService.findAllRoles());
-        return modelAndView;
-    }
 
-    @PostMapping("update")
-    public String updateUser(User user) {
-        userService.updateUser(user);
-        return "redirect:admin";
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute User user) {
+        userService.update(user);
+        return "redirect:/admin";
 
     }
 }

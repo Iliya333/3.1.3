@@ -5,25 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>User</title>
+    <title>User page</title>
 </head>
 <body>
-<p>
 
-
-</p>
-<div class="container-fluid mr-0 h-auto">
-    <div class="row d-flex bg-dark" th:object="${users}" style="height: 60px">
-        <div class="col-md-1 mt-3 text-white font-weight-bolder text-right m-0" th:text="${users.username+' '}"></div>
-        <div class="col-md-3 mt-3 text-white text left"
-             th:utext="'with roles: '+ ${#strings.arrayJoin(users.authorities,'  ') }"></div>
-        <div class="col-md-8 mt-3 text-right"><a class="text-muted" th:href="@{/logout}">Logout</a></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="navbar-text" th:text="${user.username}" style="color: white" >
+        ${name}
     </div>
-</div>
+
+    <div class="navbar-text" style="color: white">
+
+        &nbsp with roles: &nbsp
+    </div>
+
+    <div class="navbar-text" th:text="${user.authorities}" style="color: white">
+        ${roles}
+    </div>
+    <form class="btn ml-auto">
+        <buttont class="btn btn-outline-dark" ><a href="/logout" style="color: gray" >Logout</a></buttont>
+    </form>
+</nav>
+
+<br/>
 <div class="row">
     <div class="col-2 mt-3 p-0">
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-            <a class="nav-item nav-link active ml-2" data-toggle="pill" href="#user_panel" role="tab"
+            <a class="nav-item nav-link active" data-toggle="pill" href="#user_panel" role="tab"
                aria-controls="user_panel" aria-selected="true">User</a>
         </div>
     </div>
@@ -51,13 +59,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="user : ${users}">
-                                    <td th:text="*{users.firstName}"></td>
-                                    <td th:text="*{users.lastName}"></td>
-                                    <td th:text="*{users.age}"></td>
-                                    <td th:text="*{users.email}"></td>
+                                <tr th:each="user : ${user}">
+                                    <td th:text="*{user.firstName}"></td>
+                                    <td th:text="*{user.lastName}"></td>
+                                    <td th:text="*{user.age}"></td>
+                                    <td th:text="*{user.email}"></td>
                                     <td>
-                                        <th:block th:each="role :${users.authorities}">
+                                        <th:block th:each="role :${user.authorities}">
                                             <a th:text="${role}"></a>
                                         </th:block>
                                     </td>
@@ -82,3 +90,4 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+

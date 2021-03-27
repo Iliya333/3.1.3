@@ -1,25 +1,61 @@
 package web.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
+import web.repositories.UserRepositories;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface UserService extends UserDetailsService {
+@Service
+@Transactional
+public class UserService implements UserDetailsService {
 
-    User findByEmail(String email);
+    private final UserRepositories repositories;
 
-    User getUserId(Long id);
-
-    List<User> listUser();
-
-    void saveUser(User user);
-
-    void deleteById(Long id);
-
-    void updateUser(User user);
+    @Autowired
+    public UserService(UserRepositories repositories) {
+        this.repositories = repositories;
+    }
 
 
+    public User findByEmail(String email) {
+        return repositories.findByEmail(email);
+    }
 
 
+    public Optional<User> findById(Long id) {
+        return repositories.findById(id);
+    }
+
+
+    public List<User> findAll() {
+        return repositories.findAll();
+    }
+
+
+    public void saveUser(User user) {
+        repositories.save(user);
+    }
+
+
+    public void deleteById(Long id) {
+        repositories.deleteById(id);
+    }
+
+
+    public void update(User user) {
+        repositories.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+       return repositories.findByEmail(s);
+
+    }
 }
