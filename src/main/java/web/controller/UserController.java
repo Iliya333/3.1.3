@@ -6,15 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import web.model.Role;
+
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
 
-import java.security.Principal;
-import java.util.Set;
+
+
 
 @Controller
 public class UserController {
@@ -43,6 +42,9 @@ public class UserController {
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("users", userService.findAll());
         return "admin";
+
+
+
     }
 
     @GetMapping(value = "user")
