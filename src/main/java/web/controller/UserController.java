@@ -5,14 +5,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
-
-
-
 
 
 @Controller
@@ -44,7 +43,6 @@ public class UserController {
         return "admin";
 
 
-
     }
 
     @GetMapping(value = "user")
@@ -56,17 +54,10 @@ public class UserController {
         return "user";
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public String createUsers(@ModelAttribute User user) {
         userService.saveUser(user);
         return "redirect:/admin";
-    }
-
-    @PostMapping("/create")
-    public String createUser(User user) {
-        userService.saveUser(user);
-        return "redirect:admin";
-
     }
 
     @PostMapping("/delete")

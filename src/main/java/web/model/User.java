@@ -41,6 +41,8 @@ public class User implements UserDetails {
     private String password;
 
 
+
+
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -95,4 +97,15 @@ public class User implements UserDetails {
         return true;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+
+    }
+
+    public void setRoles(String toString) {
+    }
 }

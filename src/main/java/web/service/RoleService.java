@@ -18,6 +18,7 @@ public class RoleService {
 
     private final RoleRepositories repositories;
 
+
     @Autowired
     public RoleService(RoleRepositories repositories) {
         this.repositories = repositories;
