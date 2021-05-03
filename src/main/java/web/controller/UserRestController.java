@@ -1,19 +1,18 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/api")
 public class UserRestController {
 
     private final UserService userService;
@@ -25,56 +24,46 @@ public class UserRestController {
         this.roleService = roleService;
     }
 
-    @GetMapping(value = "/users")
-    public ResponseEntity<Iterable<User>> getUsers() {
-
-        return ResponseEntity.ok().body( userService.findAll());
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getAuthorizedUser() {
+        User authorizedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok()
+                .body(authorizedUser);
     }
 
-    @GetMapping(value = "/roles")
-    public ResponseEntity<Iterable<Role>> getRoles() {
+    @GetMapping("/allUsers")
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        return ResponseEntity.ok().body(userService.findAll());
+    }
+
+    @GetMapping("/allRoles")
+    public ResponseEntity<Iterable<Role>> getAllRoles() {
         return ResponseEntity.ok(roleService.findAllRoles());
     }
 
-    @GetMapping(value = "/getUser/{id}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(userService.findById(id));
+
+    @GetMapping("/getUser/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 
-    @DeleteMapping(value = "/deleteUser/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable("id") Long id) {
-        userService.deleteById(id);
-        return ResponseEntity.ok().body("User with id=" + id + " deleted");
-    }
-
-    @PostMapping(value = "/updateUser")
-    public ResponseEntity<User> updateUser(@RequestBody Map<String, Object> payload) {
-        User user = new User();
-        user.setId(Long.valueOf(String.valueOf(payload.get("id"))));
-        fillUser(payload, user);
-        userService.update(user);
-        return ResponseEntity.ok().body(user);
-    }
-
-    @PostMapping(value = "/saveNewUser")
-    public ResponseEntity<User> saveNewUser(@RequestBody Map<String, Object> payload){
-        User user = new User();
-        fillUser(payload, user);
-        UserDetails byUsername = userService.loadUserByUsername(user.getUsername());
-        if (byUsername != null) {
-            return ResponseEntity.unprocessableEntity().body(user);
-        }
+    @PostMapping("/addUser")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.saveUser(user);
-        return ResponseEntity.ok(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    private void fillUser(Map<String, Object> payload, User user) {
-        user.setLastName(String.valueOf(payload.get("name")));
-        user.setAge(Integer.parseInt(String.valueOf(payload.get("age"))));
-        user.setPassword(String.valueOf(payload.get("password")));
-        Iterable<String> roles = (Iterable<String>) payload.get("roles");
-        StringBuilder stringBuilder = new StringBuilder();
-        roles.forEach(role -> stringBuilder.append(role).append(" "));
-        user.setRoles(stringBuilder.toString());
+    @PutMapping("/editUser")
+    public ResponseEntity<User> editUser(@RequestBody User user) {
+        userService.update(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+
+

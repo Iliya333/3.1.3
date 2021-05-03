@@ -6,24 +6,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
-
 @Controller
 public class UserController {
 
-    private final UserService userService;
     private final RoleService roleService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
-        this.userService = userService;
+    public UserController(RoleService roleService, UserService userService) {
         this.roleService = roleService;
+        this.userService = userService;
     }
 
 
@@ -52,25 +48,5 @@ public class UserController {
         model.addAttribute("roles", roleService.findAllRoles());
         model.addAttribute("users", userService.findAll());
         return "user";
-    }
-
-    @PostMapping("/create")
-    public String createUsers(@ModelAttribute User user) {
-        userService.saveUser(user);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/delete")
-    public String deleteUser(@RequestParam("id") Long id) {
-        userService.deleteById(id);
-        return "redirect:/admin";
-    }
-
-
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user) {
-        userService.update(user);
-        return "redirect:/admin";
-
     }
 }
