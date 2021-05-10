@@ -33,9 +33,6 @@ public class UserController {
     public String getAllAdmin(ModelMap model) {
         UserDetails userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("authorizedUser", userDetails);
-        model.addAttribute("newUser", new User());
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("users", userService.findAll());
         return "admin";
 
 
@@ -45,8 +42,9 @@ public class UserController {
     public String getAllUser(ModelMap model) {
         UserDetails userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("user", userDetails);
-        model.addAttribute("roles", roleService.findAllRoles());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("users", userService.getAllUsers());
         return "user";
     }
 }
+

@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import web.model.User;
 import web.repositories.UserRepositories;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -23,6 +24,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     public UserService(UserRepositories repositories) {
         this.repositories = repositories;
+
     }
 
 
@@ -31,15 +33,14 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Optional<User> findById(Long id) {
-        return repositories.findById(id);
+    public User getById(Long id) {
+        return repositories.findById(id).orElse(new User());
     }
 
 
-    public List<User> findAll() {
+    public Iterable<User> getAllUsers() {
         return repositories.findAll();
     }
-
 
     public User saveUser(User user) {
         repositories.save(user);

@@ -1,8 +1,8 @@
 package web.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +26,7 @@ public class Role implements GrantedAuthority {
     private String role;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
     private Set<User> users = new HashSet<>();
 
 
@@ -33,9 +34,13 @@ public class Role implements GrantedAuthority {
     }
 
     public Role(String role) {
+        if (role.contains("USER")) {
+            this.id = 1L;
+        } else if (role.contains("ADMIN")) {
+            this.id = 2L;
+        }
         this.role = role;
     }
-
 
 
     @Override

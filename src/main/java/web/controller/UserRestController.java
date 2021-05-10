@@ -3,14 +3,12 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
-
-import java.util.Optional;
 
 @RestController
 public class UserRestController {
@@ -23,28 +21,28 @@ public class UserRestController {
         this.userService = userService;
         this.roleService = roleService;
     }
-
-    @GetMapping("/getUser")
-    public ResponseEntity<User> getAuthorizedUser() {
-        User authorizedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok()
-                .body(authorizedUser);
+    @GetMapping("/getAuthorizedUser")
+    public ResponseEntity<User> getAuthorizedUser(Authentication authentication) {
+        User user = userService.findByEmail(authentication.getName());
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/allUsers")
+
+    @GetMapping(value = "/users")
     public ResponseEntity<Iterable<User>> getAllUsers() {
-        return ResponseEntity.ok().body(userService.findAll());
+        return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @GetMapping("/allRoles")
+    @GetMapping(value = "/roles")
     public ResponseEntity<Iterable<Role>> getAllRoles() {
-        return ResponseEntity.ok(roleService.findAllRoles());
+        return ResponseEntity.ok(roleService.getAllRoles());
     }
 
 
     @GetMapping("/getUser/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+        User user = userService.getById(id);
+        return ResponseEntity.ok().body(user);
     }
 
     @PostMapping("/addUser")
@@ -54,13 +52,13 @@ public class UserRestController {
     }
 
     @PutMapping("/editUser")
-    public ResponseEntity<User> editUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         userService.update(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

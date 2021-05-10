@@ -1,11 +1,10 @@
-allUsers();
+showAllUsers();
 
-function allUsers(){
-    alert("allUsers connect")
-
+function showAllUsers(){
     let tBody = document.getElementById("allUsers");
     tBody.innerHTML = "";
-    fetch('http://localhost:8080/allUsers')
+
+    fetch('http://localhost:8080/users')
         .then(response => response.json())
         .then(user => {
             user.forEach(function (user) {
@@ -23,17 +22,28 @@ function allUsers(){
                 let cell4 = row.insertCell();
                 cell4.innerHTML = user.email;
                 let cell5 = row.insertCell();
-               // cell5.innerHTML = getRolesFromUser(user).textContent;
+                cell5.innerHTML = getRolesFromUser(user).textContent;
 
-                let cell6 = row.insertCell();
+                var cell6 = row.insertCell();
                 cell6.innerHTML =
-                    '<button type="button" onclick="modalEdit(' + user.id +')" class="btn btn-primary btn-sm">\n' +
+                    '<button type="button" onclick="modalEdit(' + user.id +')" class="btn btn-info">\n' +
                     '   Edit</button>\n';
 
                 let cell7 = row.insertCell();
                 cell7.innerHTML =
-                    '<button type="button" onclick="modalDelete(' + user.id +')" class="btn btn-danger btn-sm">' +
+                    '<button type="button" onclick="modalDelete(' + user.id +')" class="btn btn-danger">' +
                     'Delete</button>\n';
             })
         });
+    function getRolesFromUser(user) {
+        let rolesList = document.createElement('ul');
+
+        for (let i = 0; i < user.authorities.length; i++) {
+            let role = document.createElement('li');
+            role.textContent = user.authorities[i].role + " ";
+            rolesList.appendChild(role);
+        }
+        return rolesList;
+    }
+
 }

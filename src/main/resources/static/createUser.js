@@ -21,7 +21,7 @@ function createUser() {
             window.formNewUser.newPassword.value = "";
             window.formNewUser.newRoles.value = "";
 
-            allUsers();
+            showAllUsers();
             $('#successful').modal();
         });
 }

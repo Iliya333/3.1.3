@@ -5,6 +5,6 @@ function deleteUser(id) {
         headers: {"Content-type": "application/json; charset=UTF-8"}
     })
         .then(response => {
-            allUsers();
+            showAllUsers();
         });
 }

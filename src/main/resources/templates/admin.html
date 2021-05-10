@@ -50,7 +50,7 @@
                 <a class="nav-link" data-toggle="tab" href="#new_user">New User</a>
             </li>
         </ul>
-<!--        табличка адмена-->
+        <!--        табличка адмена-->
         <div class="tab-content">
             <div class="tab-pane fade show active" id="users_table" tabindex="-1">
                 <div class="pl-3 pt-1 d-flex border-bottom"><h4> All users</h4></div>
@@ -77,7 +77,7 @@
                 <div class="pl-3 pt-1 d-flex border-bottom"><h4> Add new user</h4></div>
                 <div class="container bg-white text-center p-3">
                     <form id="formNewUser" style="width: 300px;"
-                          class="form-signin mx-auto font-weight-bold" >
+                          class="form-signin mx-auto font-weight-bold">
                         <p>
                             <label>First name</label>
                             <input class="form-control form-control-sm" type="text"
@@ -109,34 +109,34 @@
                                 <option value="ROLE_USER" label="USER" selected></option>
                                 <option value="ROLE_ADMIN" label="ADMIN"></option>
                             </select>
-                        </p>
-                    </form>
-                    <button onclick="createUser()" class="btn btn-success">Add new user</button>
-                </div>
+                     <button onclick="createUser()" class="btn btn-success">Add new user</button>
+              </div>
             </div>
+                <div class="tab-pane fade pl-3" style="height: 700px;" id="user_panel" role="tabpanel"
+                     aria-labelledby="user_panel">
+                    <h1>User information-page</h1>
+                    <div class="pl-3 pt-1 d-flex border-top border-left border-right"><h4> About user</h4></div>
+                    <div class="bg-white border p-3">
+                        <table class="table table-striped border-top">
+                            <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody id="user_info"></tbody>
+                        </table>
+                    </div>
+                </div>
 
+            </div>
         </div>
     </div>
 
-    <div class="tab-pane fade pl-3" style="height: 700px;" id="user_panel" role="tabpanel" aria-labelledby="user_panel">
-        <h1>User information-page</h1>
-        <div class="pl-3 pt-1 d-flex border-top border-left border-right"><h4> About user</h4></div>
-        <div class="bg-white border p-3">
-            <table class="table table-striped border-top">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Age</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                </tr>
-                </thead>
-                <tbody id="user_info"></tbody>
-            </table>
-        </div>
-    </div>
+
 </div>
 </div>
 </div>
@@ -154,8 +154,6 @@
         </div>
     </div>
 </div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
@@ -164,13 +162,14 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
+<script> window.href.location = "errorPage" </script>
+
 <script src="/createUser.js"></script>
 <script src="/deleteUser.js"></script>
 <script src="/editUser.js"></script>
 <script src="/modalDelete.js"></script>
 <script src="/modalEdit.js"></script>
-<script src="/getRolesFromUser.js"></script>
-<script src="/allUsers.js"> </script>
+<script src="/showAllUsers.js"></script>
 <script src="/showUserInfo.js"></script>
 </body>
 </html>

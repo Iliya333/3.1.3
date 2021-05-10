@@ -1,5 +1,6 @@
 package web.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,6 +47,7 @@ public class User implements UserDetails {
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonBackReference
     private Set<Role> roles = new HashSet<>();
 
     public User() {
@@ -101,11 +103,31 @@ public class User implements UserDetails {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-
+    public void setRoles(String roles) {
+        this.roles = new HashSet<>();
+        if (roles.contains("ADMIN")) {
+            this.roles.add(new Role("ADMIN"));
+        }
+        if (roles.contains("USER")) {
+            this.roles.add(new Role("USER"));
+        }
     }
 
-    public void setRoles(String toString) {
+
+    @Override
+    public String toString() {
+            String rolesString = "";
+            for (Role role: this.roles) {
+                rolesString += role.getRole();
+            }
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -7,11 +7,11 @@ function modalEdit(id) {
             let adminSelect = "";
             let userSelect = "";
 
-            for (let i = 0; i < user.roles.length; i++) {
-                if (user.roles[i].roleName == "ADMIN") {
+            for (let i = 0; i < user.authorities.length; i++) {
+                if (user.authorities[i].role == "ADMIN") {
                     adminSelect = "selected";
                 }
-                if (user.roles[i].roleName == "USER") {
+                if (user.authorities[i].role == "USER") {
                     userSelect = "selected";
                 }
             }
@@ -42,7 +42,7 @@ function modalEdit(id) {
                 '                    <p>\n' +
                 '                        <label>First name</label>\n' +
                 '                        <input class="form-control form-control-sm" type="text"\n' +
-                '                               id="editName" value="' + user.firstName + '"\n' +
+                '                               id="editFirstName" value="' + user.firstName + '"\n' +
                 '                               placeholder="First name" required>\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
