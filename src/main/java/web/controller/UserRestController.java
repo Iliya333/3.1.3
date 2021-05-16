@@ -1,7 +1,6 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,7 @@ public class UserRestController {
         this.userService = userService;
         this.roleService = roleService;
     }
+
     @GetMapping("/getAuthorizedUser")
     public ResponseEntity<User> getAuthorizedUser(Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
@@ -45,22 +45,22 @@ public class UserRestController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    @PostMapping("/create")
+    public ResponseEntity<User> create(@RequestBody User user) {
         userService.saveUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.unprocessableEntity().body(user);
     }
 
-    @PutMapping("/editUser")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
         userService.update(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().body(user);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().body(id);
     }
 }
 

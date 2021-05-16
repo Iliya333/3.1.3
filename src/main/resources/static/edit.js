@@ -1,22 +1,32 @@
-function deleteUser(id) {
-
-    alert("modalDelete connect")
+function edit(id) {
 
     fetch('http://localhost:8080/getUser/' + id)
         .then(response => response.json())
         .then(user => {
 
+            let adminSelect = "";
+            let userSelect = "";
+
+            for (let i = 0; i < user.authorities.length; i++) {
+                if (user.authorities[i].role == "ADMIN") {
+                    adminSelect = "selected";
+                }
+                if (user.authorities[i].role == "USER") {
+                    userSelect = "selected";
+                }
+            }
+
             let modal = document.getElementById('modalWindow');
 
             modal.innerHTML =
-                '<div id="deleteUser" \n' +
+                '<div id="edit" \n' +
                 '     class="modal fade" tabindex="-1" role="dialog"\n' +
                 '     aria-labelledby="TitleModalLabel" aria-hidden="true"\n' +
                 '     data-backdrop="static" data-keyboard="false">\n' +
                 '    <div class="modal-dialog modal-dialog-scrollable">\n' +
                 '        <div class="modal-content">\n' +
                 '            <div class="modal-header">\n' +
-                '                <h5 class="modal-title" id="TitleModalLabel">Delete user</h5>\n' +
+                '                <h5 class="modal-title" id="TitleModalLabel">Edit user</h5>\n' +
                 '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
                 '                    <span aria-hidden="true">&times;</span>\n' +
                 '                </button>\n' +
@@ -27,33 +37,43 @@ function deleteUser(id) {
                 '                    <p>\n' +
                 '                        <label>ID</label>\n' +
                 '                        <input class="form-control form-control-sm" type="text"\n' +
-                '                               name="id" value="' + user.id + '" readonly>\n' +
+                '                               id="editID" name="id" value="' + user.id + '" readonly>\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
                 '                        <label>First name</label>\n' +
                 '                        <input class="form-control form-control-sm" type="text"\n' +
-                '                               value="' + user.firstName + '" readonly>\n' +
+                '                               id="editFirstName" value="' + user.firstName + '"\n' +
+                '                               placeholder="First name" required>\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
                 '                        <label>Last name</label>\n' +
                 '                        <input class="form-control form-control-sm" type="text"\n' +
-                '                               value="' + user.lastName + '" readonly>\n' +
+                '                               id="editLastName" value="' + user.lastName + '" ' +
+                '                               placeholder="Last name" required>\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
                 '                        <label>Age</label>\n' +
                 '                        <input class="form-control form-control-sm" type="number"\n ' +
-                '                               value="' + user.age + '" readonly>\n' +
+                '                               id="editAge" value="' + user.age + '"\n ' +
+                '                               placeholder="Age" required>\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
                 '                        <label>Email</label>\n' +
                 '                        <input class="form-control form-control-sm" type="email"\n' +
-                '                               value="' + user.email + '" readonly>\n' +
+                '                               id="editEmail" value="' + user.email + '"\n' +
+                '                               placeholder="Email" required>\n' +
+                '                    </p>\n' +
+                '                    <p>\n' +
+                '                        <label>Password</label>\n' +
+                '                        <input class="form-control form-control-sm" type="password"\n' +
+                '                               id="editPassword" placeholder="Password">\n' +
                 '                    </p>\n' +
                 '                    <p>\n' +
                 '                        <label>Role</label>\n' +
-                '                        <select class="form-control form-control-sm" multiple size="2" readonly>\n' +
-                '                            <option>ADMIN</option>\n' +
-                '                            <option>USER</option>\n' +
+                '                        <select id="editRoles" multiple size="2" required \n' +
+                '                               class="form-control form-control-sm">\n' +
+                '                            <option value="ADMIN"' + adminSelect + '>ADMIN</option>\n' +
+                '                            <option value="USER"' + userSelect + '>USER</option>\n' +
                 '                        </select>\n' +
                 '                    </p>' +
                 '                </form>\n' +
@@ -61,24 +81,34 @@ function deleteUser(id) {
                 '            <div class="modal-footer">\n' +
                 '                <button type="button" class="btn btn-secondary"\n' +
                 '                        data-dismiss="modal">Close</button>\n' +
-                '                <button class="btn btn-danger" data-dismiss="modal"\n' +
-                '                        onclick="deleteUserById(' + user.id + ')">Delete</button>\n' +
+                '                <button class="btn btn-primary" data-dismiss="modal"\n' +
+                '                        onclick="updateUser()">Edit</button>\n' +
                 '            </div>\n' +
                 '        </div>\n' +
                 '    </div>\n' +
                 '</div>';
 
-            $("#deleteUser").modal();
+            $("#edit").modal();
 
         });
-}
-function deleteUserById(id) {
 
-    fetch('http://localhost:8080/delete/' + id, {
-        method: 'DELETE',
+}
+function updateUser() {
+    fetch('http://localhost:8080/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+            id: window.formEditUser.editID.value,
+            firstName: window.formEditUser.editFirstName.value,
+            lastName: window.formEditUser.editLastName.value,
+            age: window.formEditUser.editAge.value,
+            email: window.formEditUser.editEmail.value,
+            password: window.formEditUser.editPassword.value,
+            roles: window.formEditUser.editRoles.value
+        }),
         headers: {"Content-type": "application/json; charset=UTF-8"}
     })
-        .then(response => {
+        .then(response => response.json())
+        .then(user => {
             showAllUsers();
         });
 }
