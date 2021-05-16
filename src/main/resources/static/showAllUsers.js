@@ -26,12 +26,12 @@ function showAllUsers(){
 
                 var cell6 = row.insertCell();
                 cell6.innerHTML =
-                    '<button type="button" onclick="modalEdit(' + user.id +')" class="btn btn-info">\n' +
+                    '<button type="button" onclick=" edit(' + user.id +')" class="btn btn-info">\n' +
                     '   Edit</button>\n';
 
                 let cell7 = row.insertCell();
                 cell7.innerHTML =
-                    '<button type="button" onclick="modalDelete(' + user.id +')" class="btn btn-danger">' +
+                    '<button type="button" onclick="deleteUser(' + user.id +')" class="btn btn-danger">' +
                     'Delete</button>\n';
             })
         });

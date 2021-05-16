@@ -1,7 +1,7 @@
 function createUser() {
     alert("create connect")
 
-    fetch('http://localhost:8080/addUser', {
+    fetch('http://localhost:8080/create', {
         method: 'POST',
         body: JSON.stringify({
             firstName: window.formNewUser.newFirstName.value,

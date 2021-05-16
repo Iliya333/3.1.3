@@ -7,10 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import web.model.Role;
 import web.repositories.RoleRepositories;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.*;
 @Service
 @Slf4j
 @Transactional
@@ -20,23 +19,16 @@ public class RoleService {
 
 
     @Autowired
-    public RoleService(RoleRepositories repositories ) {
+    public RoleService(RoleRepositories repositories) {
         this.repositories = repositories;
 
     }
 
-
     public Set<Role> getAllRoles() {
-        Iterable<Role>  iterable =repositories.findAll();
+        Iterable<Role> iterable = repositories.findAll();
         Set<Role> set = new HashSet<>();
         iterable.forEach(role -> set.add(role));
         return set;
     }
-
-
-    public void createRoles(Set<Role> roles) {
-        repositories.saveAll(roles);
-    }
-
 
 }
