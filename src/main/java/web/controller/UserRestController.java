@@ -6,60 +6,60 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
-import web.service.RoleService;
-import web.service.UserService;
+import web.service.RoleServiceImp;
+import web.service.UserServiceImp;
 
 @RestController
 public class UserRestController {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    private final UserServiceImp userServiceImp;
+    private final RoleServiceImp roleServiceImp;
 
     @Autowired
-    public UserRestController(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
+    public UserRestController(UserServiceImp userServiceImp, RoleServiceImp roleServiceImp) {
+        this.userServiceImp = userServiceImp;
+        this.roleServiceImp = roleServiceImp;
     }
 
     @GetMapping("/getAuthorizedUser")
     public ResponseEntity<User> getAuthorizedUser(Authentication authentication) {
-        User user = userService.findByEmail(authentication.getName());
+        User user = userServiceImp.findByEmail(authentication.getName());
         return ResponseEntity.ok(user);
     }
 
 
     @GetMapping(value = "/users")
     public ResponseEntity<Iterable<User>> getAllUsers() {
-        return ResponseEntity.ok().body(userService.getAllUsers());
+        return ResponseEntity.ok().body(userServiceImp.getAllUsers());
     }
 
     @GetMapping(value = "/roles")
     public ResponseEntity<Iterable<Role>> getAllRoles() {
-        return ResponseEntity.ok(roleService.getAllRoles());
+        return ResponseEntity.ok(roleServiceImp.getAllRoles());
     }
 
 
     @GetMapping("/getUser/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
-        User user = userService.getById(id);
+        User user = userServiceImp.getById(id);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping("/create")
     public ResponseEntity<User> create(@RequestBody User user) {
-        userService.saveUser(user);
+        userServiceImp.saveUser(user);
         return ResponseEntity.unprocessableEntity().body(user);
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        userService.update(user);
+        userServiceImp.update(user);
         return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        userService.deleteById(id);
+        userServiceImp.deleteById(id);
         return ResponseEntity.ok().body(id);
     }
 }

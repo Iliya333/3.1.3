@@ -7,19 +7,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import web.model.User;
-import web.service.RoleService;
-import web.service.UserService;
+import web.service.RoleServiceImp;
+import web.service.UserServiceImp;
 
 @Controller
 public class UserController {
 
-    private final RoleService roleService;
-    private final UserService userService;
+    private final RoleServiceImp roleServiceImp;
+    private final UserServiceImp userServiceImp;
 
     @Autowired
-    public UserController(RoleService roleService, UserService userService) {
-        this.roleService = roleService;
-        this.userService = userService;
+    public UserController(RoleServiceImp roleServiceImp, UserServiceImp userServiceImp) {
+        this.roleServiceImp = roleServiceImp;
+        this.userServiceImp = userServiceImp;
     }
 
 
@@ -42,8 +42,8 @@ public class UserController {
     public String getAllUser(ModelMap model) {
         UserDetails userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("user", userDetails);
-        model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleServiceImp.getAllRoles());
+        model.addAttribute("users", userServiceImp.getAllUsers());
         return "user";
     }
 }
